@@ -18,7 +18,7 @@ option(TBB_STATIC_BUILD "TBB is built as a static library." OFF)
 option(TBB_NO_EXPLICIT_LINKAGE "Explicit linkage of TBB libraries is disabled on windows." OFF)
 option(BUILD_USE_CUSTOM_BOOST "Using a custom boost layout." OFF)
 option(BUILD_BOOST_ALL_NO_LIB "Disable linking of boost libraries from boost headers." OFF)
-option(BUILD_DISABLE_CXX11_ABI "Disable the use of the new CXX11 ABI" OFF)
+option(BUILD_DISABLE_CXX11_ABI "Disable the use of the new CXX11 ABI" ON)  # For USD 20.05 and later
 option(BUILD_HEADERS_AS_SOURCES "Add headers are source files to the target to help when generating IDE projects." OFF)
 set(USD_OVERRIDE_PLUGINPATH_NAME "PXR_PLUGINPATH_NAME" CACHE STRING "Override the plugin path name for the USD libraries. Used when running the testsuite with a static procedural")
 
@@ -33,7 +33,7 @@ option(BUILD_SCENE_DELEGATE "Builds the Scene Delegate" OFF)
 option(BUILD_DOCS "Builds the Documentation" ON)
 option(BUILD_TESTSUITE "Builds the testsuite" ON)
 option(BUILD_UNIT_TESTS "Build the unit tests" OFF)
-option(BUILD_USE_PYTHON3 "Use python 3." OFF)
+option(BUILD_USE_PYTHON3 "Use python 3." ON)
 
 set(PREFIX_PROCEDURAL "procedural" CACHE STRING "Directory to install the procedural under.")
 set(PREFIX_PLUGINS "plugin" CACHE STRING "Directory to install the plugins (Hydra and Ndr) under.")

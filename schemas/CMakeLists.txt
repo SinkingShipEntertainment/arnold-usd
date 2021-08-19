@@ -10,6 +10,8 @@ set(CREATE_SCHEMA_PY "${CMAKE_CURRENT_SOURCE_DIR}/createSchemaFile.py")
 # Using add_custom_command for the schemagen won't work, as it runs after any file(GLOB) or include() calls, and we
 # need a list of source files for the build.
 
+set(CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT)
+
 # Generating the schema file.
 execute_process(
     COMMAND
