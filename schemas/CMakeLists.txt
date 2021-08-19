@@ -10,12 +10,14 @@ set(CREATE_SCHEMA_PY "${CMAKE_CURRENT_SOURCE_DIR}/createSchemaFile.py")
 # Using add_custom_command for the schemagen won't work, as it runs after any file(GLOB) or include() calls, and we
 # need a list of source files for the build.
 
+set(CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT)
+
 # Generating the schema file.
 execute_process(
     COMMAND
     ${CMAKE_COMMAND} -E env
-    "PYTHONPATH=${ARNOLD_PYTHON_DIR}"
-    "LD_LIBRARY_PATH=${ARNOLD_BINARY_DIR}"
+    "PYTHONPATH=$ENV{PYTHONPATH}:${ARNOLD_PYTHON_DIR}"
+    "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${ARNOLD_BINARY_DIR}"
     ${Python2_EXECUTABLE} "${CREATE_SCHEMA_PY}" "${SCHEMAS_OUT}"
 )
 
@@ -41,8 +43,8 @@ execute_process(
 execute_process(
     COMMAND
     ${CMAKE_COMMAND} -E env
-    "PYTHONPATH=${USD_LIBRARY_DIR}/python"
-    "LD_LIBRARY_PATH=${LIBRARY_PATHS}"
+    "PYTHONPATH=$ENV{PYTHONPATH}:${USD_LIBRARY_DIR}/python"
+    "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${LIBRARY_PATHS}"
     "PATH=${LIBRARY_PATHS}"
     ${Python2_EXECUTABLE} "${USD_GENSCHEMA}" "${SCHEMAS_USDA}"
     WORKING_DIRECTORY "${SCHEMAS_SOURCE_OUT}"

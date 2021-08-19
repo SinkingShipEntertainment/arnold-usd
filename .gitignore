@@ -52,3 +52,7 @@ cmake-*
 
 # mac cruft
 .DS_Store
+
+# REZ
+_rez_build
+.vscode
