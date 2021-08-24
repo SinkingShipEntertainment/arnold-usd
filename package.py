@@ -31,8 +31,6 @@ with scope("config") as c:
 
 requires = [
     "arnold_sdk-6.2.1",
-    "boost-1.61",
-    "usd-20.08.sse.1",
 ]
 
 private_build_requires = [
@@ -40,7 +38,7 @@ private_build_requires = [
 ]
 
 variants = [
-    ["platform-linux", "arch-x86_64", "os-centos-7"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-20.08.sse.1"],
 ]
 
 uuid = "repository.arnold-usd"
@@ -67,7 +65,12 @@ def commands():
     env.ARNOLD_USD_LOCATION.append("{root}")
 
     env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")
-    env.PYTHONPATH.append("{root}/lib/python")
     env.PXR_PLUGINPATH_NAME.append("{root}/plugin")
-    env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
-    env.LD_LIBRARY_PATH.append("{root}/lib")
+    env.PATH.append("{root}/bin")
+
+    # NOTE: Old version of the source code was creating "lib"
+    #env.PYTHONPATH.append("{root}/lib/python")
+    #env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
+    #env.LD_LIBRARY_PATH.append("{root}/lib")
+
+    alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
