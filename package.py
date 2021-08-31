@@ -38,8 +38,15 @@ private_build_requires = [
 ]
 
 variants = [
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-20.08.sse.1"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-20.08.sse.1", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-20.08.sse.1", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-21.05.sse.1", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.05.sse.1", "!ptex"],
 ]
+
+# Pass cmake arguments:
+# rez-build -i -- -DBoost_NO_BOOST_CMAKE=On -DBoost_NO_SYSTEM_PATHS=True
+# rez-release -- -DBoost_NO_BOOST_CMAKE=On -DBoost_NO_SYSTEM_PATHS=True
 
 uuid = "repository.arnold-usd"
 
@@ -73,4 +80,4 @@ def commands():
     #env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
     #env.LD_LIBRARY_PATH.append("{root}/lib")
 
-    alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
+    #alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
