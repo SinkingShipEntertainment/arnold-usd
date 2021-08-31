@@ -41,6 +41,10 @@ variants = [
     ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08"],
 ]
 
+# Pass cmake arguments:
+# rez-build -i -- -DBoost_NO_BOOST_CMAKE=On -DBoost_NO_SYSTEM_PATHS=True
+# rez-release -- -DBoost_NO_BOOST_CMAKE=On -DBoost_NO_SYSTEM_PATHS=True
+
 uuid = "repository.arnold-usd"
 
 def pre_build_commands():
@@ -73,4 +77,4 @@ def commands():
     #env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
     #env.LD_LIBRARY_PATH.append("{root}/lib")
 
-    alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
+    #alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
