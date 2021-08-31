@@ -39,9 +39,9 @@ private_build_requires = [
 
 variants = [
     ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-20.08.sse.1", "!ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-20.08.sse.1", "!ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-21.05.sse.1", "!ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.05.sse.1", "!ptex"],
+    #["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-20.08.sse.1", "!ptex"],  # Not available because of Boost
+    #["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.61", "usd-21.05.sse.1", "!ptex"],  # Not available because of MaterialX
+    #["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.05.sse.1", "!ptex"],  # Not available because of MaterialX and Boost
 ]
 
 # Pass cmake arguments:
