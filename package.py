@@ -71,10 +71,3 @@ def commands():
     env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")
     env.PXR_PLUGINPATH_NAME.append("{root}/plugin")
     env.PATH.append("{root}/bin")
-
-    # NOTE: Old version of the source code was creating "lib"
-    #env.PYTHONPATH.append("{root}/lib/python")
-    #env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
-    #env.LD_LIBRARY_PATH.append("{root}/lib")
-
-    #alias("usdview", "LD_PRELOAD=$REZ_ARNOLD_SDK_ROOT/bin/libai.so usdview")
