@@ -71,6 +71,6 @@ def commands():
     env.ARNOLD_USD_ROOT.append("{root}")
     env.ARNOLD_USD_LOCATION.append("{root}")
 
-    env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")
-    env.PXR_PLUGINPATH_NAME.append("{root}/plugin")
+    #env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")  # Coming from Arnold SDK
+    #env.PXR_PLUGINPATH_NAME.append("{root}/plugin")  # Arnold SDK will be loading it through "load_arnold" bash function
     env.PATH.append("{root}/bin")
