@@ -50,7 +50,63 @@ endif ()
 
 if (NOT BUILD_USE_CUSTOM_BOOST)
     if (USD_HAS_PYTHON)
-        find_package(Boost COMPONENTS python REQUIRED)
+
+        #find_package(Boost COMPONENTS python REQUIRED)
+
+        # ==========================================
+        # NOTE: (Marcelo Sercheli): From USD to find Boost
+
+        if (BUILD_USE_PYTHON3)
+            set(PYTHON_VERSION_MAJOR ${Python3_VERSION_MAJOR})
+            set(PYTHON_VERSION_MINOR ${Python3_VERSION_MINOR})
+        else ()
+            set(PYTHON_VERSION_MAJOR ${Python2_VERSION_MAJOR})
+            set(PYTHON_VERSION_MINOR ${Python2_VERSION_MINOR})
+        endif ()
+
+        # Set up a version string for comparisons. This is available
+        # as Boost_VERSION_STRING in CMake 3.14+
+        # Find Boost package before getting any boost specific components as we need to
+        # disable boost-provided cmake config, based on the boost version found.
+        find_package(Boost REQUIRED)
+        set(boost_version_string "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}")
+
+        # Boost provided cmake files (introduced in boost version 1.70) result in
+        # inconsistent build failures on different platforms, when trying to find boost
+        # component dependencies like python, program options, etc. Refer some related
+        # discussions:
+        # https://github.com/boostorg/python/issues/262#issuecomment-483069294
+        # https://github.com/boostorg/boost_install/issues/12#issuecomment-508683006
+        #
+        # Hence to avoid issues with Boost provided cmake config, Boost_NO_BOOST_CMAKE
+        # is enabled by default for boost version 1.70 and above. If a user explicitly
+        # set Boost_NO_BOOST_CMAKE to Off, following will be a no-op.
+        if (${boost_version_string} VERSION_GREATER_EQUAL "1.70")
+            option(Boost_NO_BOOST_CMAKE "Disable boost-provided cmake config" ON)
+            if (Boost_NO_BOOST_CMAKE)
+                message(STATUS "Disabling boost-provided cmake config")
+            endif()
+        endif()
+
+        find_package(Boost COMPONENTS program_options REQUIRED)
+        if (${boost_version_string} VERSION_GREATER_EQUAL "1.67")
+            # As of boost 1.67 the boost_python component name includes the
+            # associated Python version (e.g. python27, python36).
+            # XXX: After boost 1.73, boost provided config files should be able to
+            # work without specifying a python version!
+            # https://github.com/boostorg/boost_install/blob/master/BoostConfig.cmake
+
+            # Find the component under the versioned name and then set the generic
+            # Boost_PYTHON_LIBRARY variable so that we don't have to duplicate this
+            # logic in each library's CMakeLists.txt.
+            set(python_version_nodot "${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
+            find_package(Boost COMPONENTS python${python_version_nodot} REQUIRED)
+            set(Boost_PYTHON_LIBRARY "${Boost_PYTHON${python_version_nodot}_LIBRARY}")
+        else()
+            find_package(Boost COMPONENTS python REQUIRED)
+        endif()
+        # ==========================================
+
     else ()
         find_package(Boost REQUIRED)
     endif ()

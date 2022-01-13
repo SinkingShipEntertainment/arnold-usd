@@ -39,6 +39,7 @@ private_build_requires = [
 
 variants = [
     ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "houdini-19"],
 ]
 
 # Pass cmake arguments:
@@ -68,6 +69,9 @@ def commands():
     env.ARNOLD_USD_ROOT.append("{root}")
     env.ARNOLD_USD_LOCATION.append("{root}")
 
-    #env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")  # Coming from Arnold SDK
-    #env.PXR_PLUGINPATH_NAME.append("{root}/plugin")  # Arnold SDK will be loading it through "load_arnold" bash function
+    env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")
+    env.PYTHONPATH.append("{root}/lib/python")
+    env.PXR_PLUGINPATH_NAME.append("{root}/plugin")
+    env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
+    env.LD_LIBRARY_PATH.append("{root}/lib")
     env.PATH.append("{root}/bin")

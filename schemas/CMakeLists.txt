@@ -17,7 +17,7 @@ execute_process(
     COMMAND
     ${CMAKE_COMMAND} -E env
     "PYTHONPATH=${ARNOLD_PYTHON_DIR}"
-    "LD_LIBRARY_PATH=${ARNOLD_BINARY_DIR}"
+    "LD_LIBRARY_PATH=$ENV{REZ_PYTHON_ROOT}/lib:${ARNOLD_BINARY_DIR}"
     ${PYTHON_EXECUTABLE} "${CREATE_SCHEMA_PY}" "${SCHEMAS_OUT}"
 )
 
@@ -28,6 +28,12 @@ if (USD_LIBRARY_DIR)
     if (EXISTS ${USD_LIBRARY_DIR}/python)
         list(APPEND _PYTHONPATHS "${USD_LIBRARY_DIR}/python")
     endif ()
+    if (USD_PYTHONPATH)
+        list(APPEND _PYTHONPATHS "${USD_PYTHONPATH}")
+    endif()
+    if (HOUDINI_PYTHONPATH)
+        list(APPEND _PYTHONPATHS "${HOUDINI_PYTHONPATH}")
+    endif()
     list(APPEND _LIBRARY_PATHS "${USD_LIBRARY_DIR}")
 endif ()
 if (USD_BINARY_DIR)
