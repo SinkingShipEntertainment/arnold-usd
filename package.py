@@ -4,7 +4,7 @@ authors = [
     "Autodesk (Solid Angle) Arnold-Usd"
 ]
 
-# NOTE: version = <mayausd_version>.sse.<sse_version>
+# NOTE: version = <arnoldusd_version>.sse.<sse_version>
 version = "7.0.0.1.sse.1.0.0"
 
 description = \
@@ -39,7 +39,8 @@ private_build_requires = [
 
 variants = [
     ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "houdini-19"],
+    #["platform-linux", "arch-x86_64", "os-centos-7", "houdini-19"],  # We don't need since the arnold_sdk provided the usd_proc.so
+    #["platform-linux", "arch-x86_64", "os-centos-7", "maya-2022"],  # Not ready yet... look into cmake/modules/FindUsd.cmake
 ]
 
 # Pass cmake arguments:

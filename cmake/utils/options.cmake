@@ -15,7 +15,7 @@
 # ======================================
 # NOTE: (Marcelo Sercheli) Use REZ env variables per package to identify which USD to use
 if(DEFINED ENV{REZ_USD_ROOT})
-    # USD-only and Maya environments use Pixar's USD and dependencies
+    # USD-only environment uses Pixar's USD and dependencies
     message(STATUS "Using USD from Pixar, including Boost and TBB from its depedencies.")
 
     set(REZ_BUILD_USE_CUSTOM_BOOST OFF)
