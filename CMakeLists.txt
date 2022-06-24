@@ -50,7 +50,18 @@ endif ()
 
 if (NOT BUILD_USE_CUSTOM_BOOST)
     if (USD_HAS_PYTHON)
-        find_package(Boost COMPONENTS python REQUIRED)
+        if (NOT BUILD_USE_PYTHON3)
+            find_package(Boost COMPONENTS python REQUIRED)
+        else ()
+            # -----------------------------------
+            # NOTE: (Marcelo) This is for boost-1.70 or newer.
+            # Since we are using Python 3, boost will be 1.70.x
+            # Finding Boost Python using Boost prvided cmake.config fails.
+            option(Boost_NO_BOOST_CMAKE "Disable boost-provided cmake config" ON)
+            find_package(Boost COMPONENTS python37 REQUIRED)
+            set(Boost_PYTHON_LIBRARY "${Boost_PYTHON37_LIBRARY}")
+            # -----------------------------------
+        endif ()
     else ()
         find_package(Boost REQUIRED)
     endif ()
@@ -68,7 +79,7 @@ configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/arnold_usd.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/arnold_usd.h")
 
-set(CMAKE_CXX_STANDARD 11 CACHE STRING "CMake CXX Standard")
+set(CMAKE_CXX_STANDARD 14 CACHE STRING "CMake CXX Standard")  # (Marcelo) For USD 20.05 or newer
 
 if (APPLE)
     string(APPEND CMAKE_SHARED_LINKER_FLAGS " -Wl,-undefined,error")
