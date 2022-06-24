@@ -38,9 +38,8 @@ private_build_requires = [
 ]
 
 variants = [
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08"],
-    #["platform-linux", "arch-x86_64", "os-centos-7", "houdini-19"],  # We don't need since the arnold_sdk provided the usd_proc.so
-    #["platform-linux", "arch-x86_64", "os-centos-7", "maya-2022"],  # Not ready yet... look into cmake/modules/FindUsd.cmake
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08", "ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08", "!ptex"],
 ]
 
 # Pass cmake arguments:
