@@ -92,14 +92,14 @@ def getParameterStr(paramType, paramValue = None, paramEntry = None):
         if paramValue:
             intVal = paramValue.contents.INT
             strVal = str(ai.AiEnumGetString(paramEnum, intVal))
-            
+
             # FIXME we still have a problem with parameter "auto" as it creates a token that can't be parsed properly in the generated file tokens.h
             if strVal == 'auto':
                 strVal = 'metric_auto'
-            
+
             if strVal == 'linux':
                 strVal = 'os_linux'
-            
+
             valueStr = '"{}"'.format(strVal)
         optionsStr = '\n        allowedTokens = ['
 
@@ -108,19 +108,21 @@ def getParameterStr(paramType, paramValue = None, paramEntry = None):
             t = ai.AiEnumGetString(paramEnum, i)
             if not t:
                 break
+            if t is None:
+                break
 
             if t == 'auto':
                 t = "metric_auto"
-            
+
             if t == 'linux':
                 t = "os_linux"
-            
+
             if i > 0:
                 optionsStr += ','
             optionsStr += '"{}"'.format(t)
             i += 1
         optionsStr += ']'
-        
+
     elif paramType ==  ai.AI_TYPE_CLOSURE: # shouldn't be needed since closures are just for shaders
         typeStr = 'color4f'
         valueStr = '(0,0,0,0)'
@@ -130,7 +132,7 @@ def getParameterStr(paramType, paramValue = None, paramEntry = None):
 def makeCamelCase(name):
     return ''.join(x.capitalize() or '_' for x in name.split('_'))
 
-''' 
+'''
 Convert an Arnold Param Entry to a USD declaration
 and return it as a string
 '''
@@ -194,10 +196,10 @@ def arnoldToUsdParamString(paramEntry, scope):
                 optionsStr = '\n        {}{}\n        '.format(optionsStr, optionsValStr)
             else:
                 optionsStr = optionsValStr
-        
+
         ret += '{}[] {}{} ({})'.format(typeStr, scope, paramName, optionsStr)
 
-        
+
     return ret
 
 
@@ -214,7 +216,7 @@ if os.path.exists(schemaPreviousFile):
 
 # backup the current schema.usda file, to see if it changed
 if os.path.exists(schemaFile):
-    os.rename(schemaFile, schemaPreviousFile)    
+    os.rename(schemaFile, schemaPreviousFile)
 
 # This is typically named 'module.cpp' in USD modules, but we name it
 # 'wrapModule.cpp', so every python module related file has the name 'wrap'.
@@ -287,16 +289,16 @@ def createArnoldClass(entryName, parentClass, paramList, nentry, parentParamList
         file.write('class {} "{}"(\n'.format(schemaName, schemaName))
     else:
         file.write('class "{}"(\n'.format(schemaName))
-    
+
     file.write('    inherits = [</{}>]\n'.format(parentClass))
     file.write(') {\n')
-        
+
     for param in paramList:
         if param == 'name':
             continue  # nothing to do with attribute 'name'
-        
+
         if parentParamList and param in parentParamList: # if this parameter already exists in the parent class we don't add it here
-            continue  
+            continue
 
         paramEntry = ai.AiNodeEntryLookUpParameter(nentry, param)
         if paramEntry == None:
@@ -306,7 +308,7 @@ def createArnoldClass(entryName, parentClass, paramList, nentry, parentParamList
         paramStr = arnoldToUsdParamString(paramEntry, attrScope)
         if paramStr != None and len(paramStr) > 0:
             file.write('    {}\n'.format(paramStr))
-   
+
     file.write('}\n')
 
     if isAPI:
@@ -314,14 +316,14 @@ def createArnoldClass(entryName, parentClass, paramList, nentry, parentParamList
     else:
         file_module.write('    TF_WRAP(Usd%s);\n' % schemaName)
 
-        
+
 '''
 Here we want to generate a file schema.usda containing all the arnold node entries as new schemas
 We will then run usdGenSchema schema.usda in order to generate all the c++ schema classes.
 After that we'll need to compile these classes in a library that will have to be accessed by USD to know arnold schemas
 
 The Arnold schemas will be named ArnoldPolymesh, ArnoldStandardSurface, etc...
-Instead of having lots of separate schemas, we're going to group them by type. 
+Instead of having lots of separate schemas, we're going to group them by type.
 Thus each arnold node entry type (shape, shader, operator, etc...) will have a corresponding schema with the common parameters.
 The schemas for each node entry will then derive from their "type" schema
 
@@ -330,8 +332,8 @@ For example, we want a schema "ArnoldLight" defining the parameters
 and then "ArnoldSkydomeLight" deriving from "ArnoldLight" and defining the additional skydome parameters.
 
 That's not a simple information to get from Arnold as there's no API to get info about a node entry type.
-So below we're going to list the arnold node entries, check their type and list of parameters. 
-For example, in order to get the list of parameters for "ArnoldLight", we're going to compute the union of 
+So below we're going to list the arnold node entries, check their type and list of parameters.
+For example, in order to get the list of parameters for "ArnoldLight", we're going to compute the union of
 all parameters for in "ArnoldSkydomeLight", "ArnoldDistantLight", "ArnoldPointLight", "ArnoldQuadLight", etc...
 In theory we should also compare the parameter types and their default values, from AFAIK we shouldn't have this problem in the current set of arnold nodes
 '''
@@ -354,7 +356,7 @@ while not ai.AiNodeEntryIteratorFinished(nodeEntryIter):
     # we don't want to create schemas for shaders, as we're relying on UsdShade schemas
     if entryTypeName == 'shader':
         continue
-    
+
     # Get the list of parameters for this node entry
     paramsList = []
 
@@ -368,7 +370,7 @@ while not ai.AiNodeEntryIteratorFinished(nodeEntryIter):
 
     # Add an element in my list of node entries, with its name, type name, and list of parameters
     entryList.append([entryName, entryTypeName, paramsList])
-    
+
     if entryByType.get(entryTypeName) is None:
         # first time we find a node with this type, let's make the dict value a list
         entryByType[entryTypeName] = []
@@ -458,11 +460,11 @@ for entry in entryList:
     parentClass = 'Arnold{}'.format(makeCamelCase(entryTypeName))
     if entryName == 'options' or entryName == 'override':
         continue # do we want to create schemas for the options ?
-    
+
     createArnoldClass(entryName, parentClass, parametersList, nentry, typeParams[entryTypeName], False)
-    
+
     if entryName in nativeUsdList:
-        createArnoldClass(entryName, 'APISchemaBase', parametersList, nentry, 
+        createArnoldClass(entryName, 'APISchemaBase', parametersList, nentry,
             nativeUsdList[entryName], True)
 
 
@@ -484,5 +486,5 @@ file_module.write('}\n')
 file_module.close()
 file.close()
 
-# We're done with Arnold, let's end the session 
+# We're done with Arnold, let's end the session
 ai.AiEnd()
