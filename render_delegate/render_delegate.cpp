@@ -620,7 +620,7 @@ void HdArnoldRenderDelegate::_SetRenderSetting(const TfToken& _key, const VtValu
         ArnoldUsdCheckForSdfPathValue(value, [&](const SdfPath& p) { _aov_shaders = p; });
     } else if (key == str::t_subdiv_dicing_camera) {
         ArnoldUsdCheckForSdfPathValue(value, [&](const SdfPath& p) {
-            _subdiv_dicing_camera = p; 
+            _subdiv_dicing_camera = p;
             AiNodeSetPtr(_options, str::subdiv_dicing_camera, AiNodeLookUpByName(_universe, AtString(_subdiv_dicing_camera.GetText())));
         });
     } else if (key == str::color_space_linear) {
@@ -969,7 +969,7 @@ HdSprim* HdArnoldRenderDelegate::CreateSprim(const TfToken& typeId, const SdfPat
     // We're creating a new Sprim. It's possible that it is already referenced
     // by another prim (which can happen when shaders are disconnected/reconnected).
     // In this case we need to dirty it so that all source prims are properly updated.
-    // Note : for now we're only tracking dependencies for Sprim targets, but 
+    // Note : for now we're only tracking dependencies for Sprim targets, but
     // this could be extended
     const auto &it = _targetToSourcesMap.find(sprimId);
     if (it != _targetToSourcesMap.end())
@@ -1039,6 +1039,9 @@ HdSprim* HdArnoldRenderDelegate::CreateFallbackSprim(const TfToken& typeId)
     if (typeId == HdPrimTypeTokens->domeLight) {
         return HdArnoldLight::CreateDomeLight(this, SdfPath::EmptyPath());
     }
+    if (typeId == _tokens->GeometryLight) {
+        return HdArnoldLight::CreateGeometryLight(this, SdfPath::EmptyPath());
+    }
     if (typeId == HdPrimTypeTokens->simpleLight) {
         return nullptr;
     }
@@ -1056,7 +1059,7 @@ void HdArnoldRenderDelegate::DestroySprim(HdSprim* sPrim)
 
     _renderParam->Interrupt();
     const auto &id = sPrim->GetId();
-    // We could be destroying a Sprim that is being referenced by 
+    // We could be destroying a Sprim that is being referenced by
     // another source. We need to keep track of this, so that
     // all the references are properly updated
     if (_targetToSourcesMap.find(id) != _targetToSourcesMap.end())
@@ -1279,7 +1282,7 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
         bits |= HdChangeTracker::DirtyPoints | HdChangeTracker::DirtyPrimvar;
     }
     auto& changeTracker = renderIndex->GetChangeTracker();
-    
+
     auto skip = false;
     if (bits != HdChangeTracker::Clean) {
         renderIndex->GetChangeTracker().MarkAllRprimsDirty(bits);
@@ -1291,7 +1294,7 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
         // depends on the prim type. For now we're checking first if a Rprim
         // exists with this name, to choose between Rprims and Sprims.
         if (renderIndex->HasRprim(source)) {
-            // for Rprims we 
+            // for Rprims we
             changeTracker.MarkRprimDirty(source, HdChangeTracker::DirtyMaterialId);
         }
         else {
@@ -1299,10 +1302,10 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
         }
     };
     // First let's process all the dependencies that were removed.
-    // We need to remove it from all our maps, and mark all the 
-    // sources as being dirty, so that they can update their 
+    // We need to remove it from all our maps, and mark all the
+    // sources as being dirty, so that they can update their
     // new reference properly
-    while (_dependencyRemovalQueue.try_pop(id)) {        
+    while (_dependencyRemovalQueue.try_pop(id)) {
         auto it = _targetToSourcesMap.find(id);
         if (it != _targetToSourcesMap.end()) {
             skip = true; // this requires a render update
@@ -1314,11 +1317,11 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
                     sourceIt->second.erase(id);
                 }
                 // This source primitive needs to be updated
-                markPrimDirty(source);                
+                markPrimDirty(source);
             }
             // Erase the map from this target to all its sources
             _targetToSourcesMap.erase(id);
-        }        
+        }
     }
 
     ArnoldDependencyChange dependencyChange;
@@ -1328,7 +1331,7 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
         const auto &newTargets = dependencyChange.targets;
         const auto &source = dependencyChange.source;
         auto prevTargets = _sourceToTargetsMap[source];
-        
+
 
         // Set the new targets for this source
         _sourceToTargetsMap[source] = newTargets;
@@ -1341,13 +1344,13 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
                 _targetToSourcesMap[prevTarget].erase(source);
             }
         }
-        
+
         for (const auto& target : newTargets) {
             // for each target, we want to add all the source to its map
             _targetToSourcesMap[target].insert(source);
         }
     }
-    
+
     // Finally, we're processing all the dependencies that were marked as dirty.
     // For each of them, we need to update all the sources pointing at it
     while (_dependencyDirtyQueue.try_pop(id)) {
@@ -1359,7 +1362,7 @@ bool HdArnoldRenderDelegate::ShouldSkipIteration(HdRenderIndex* renderIndex, con
                 markPrimDirty(source);
             }
         }
-    }    
+    }
     return skip;
 }
 
@@ -1384,14 +1387,14 @@ const HdArnoldRenderDelegate::NativeRprimParamList* HdArnoldRenderDelegate::GetN
     return it == _nativeRprimParams.end() ? nullptr : &it->second;
 }
 
-void HdArnoldRenderDelegate::DirtyDependency(const SdfPath& id) 
+void HdArnoldRenderDelegate::DirtyDependency(const SdfPath& id)
 {
     _dependencyDirtyQueue.emplace(id);
 }
 
-void HdArnoldRenderDelegate::RemoveDependency(const SdfPath& id) 
+void HdArnoldRenderDelegate::RemoveDependency(const SdfPath& id)
 {
-    _dependencyRemovalQueue.emplace(id); 
+    _dependencyRemovalQueue.emplace(id);
 }
 
 void HdArnoldRenderDelegate::TrackDependencies(const SdfPath& source, const PathSet& targets)
@@ -1430,7 +1433,7 @@ void HdArnoldRenderDelegate::SetRenderTags(const TfTokenVector& renderTags)
 AtNode* HdArnoldRenderDelegate::GetBackground(HdRenderIndex* renderIndex)
 {
     const HdArnoldNodeGraph *nodeGraph = HdArnoldNodeGraph::GetNodeGraph(renderIndex, _background);
-    if (nodeGraph)    
+    if (nodeGraph)
         return nodeGraph->GetTerminal(str::t_background);
     return nullptr;
 }
