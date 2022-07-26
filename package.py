@@ -5,7 +5,7 @@ authors = [
 ]
 
 # NOTE: version = <arnoldusd_version>.sse.<sse_version>
-version = "7.1.2.0.sse.1.0.0"
+version = "7.1.2.0.sse.1.0.1"
 
 description = \
     """
@@ -38,8 +38,10 @@ private_build_requires = [
 ]
 
 variants = [
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08", "ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "usd-21.08", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70.0", "python-3.7.7", "usd-21.08", "ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70.0", "python-3.7.7", "usd-21.08", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70.0", "python-3.9.7", "usd-22.05", "ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70.0", "python-3.9.7", "usd-22.05", "!ptex"],
 ]
 
 # Pass cmake arguments:
