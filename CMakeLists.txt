@@ -58,8 +58,13 @@ if (NOT BUILD_USE_CUSTOM_BOOST)
             # Since we are using Python 3, boost will be 1.70.x
             # Finding Boost Python using Boost provided cmake.config fails.
             option(Boost_NO_BOOST_CMAKE "Disable boost-provided cmake config" ON)
-            find_package(Boost COMPONENTS python37 REQUIRED)
-            set(Boost_PYTHON_LIBRARY "${Boost_PYTHON37_LIBRARY}")
+            if($ENV{REZ_PYTHON_VERSION} EQUAL "3.7.7")
+                find_package(Boost COMPONENTS python37 REQUIRED)
+                set(Boost_PYTHON_LIBRARY "${Boost_PYTHON37_LIBRARY}")
+            elseif($ENV{REZ_PYTHON_VERSION} EQUAL "3.9.7")
+                find_package(Boost COMPONENTS python39 REQUIRED)
+                set(Boost_PYTHON_LIBRARY "${Boost_PYTHON39_LIBRARY}")
+            endif()
             # -----------------------------------
         endif ()
     else ()
