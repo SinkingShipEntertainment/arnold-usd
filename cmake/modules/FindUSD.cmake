@@ -45,6 +45,7 @@ find_path(USD_INCLUDE_DIR pxr/pxr.h
 find_path(USD_LIBRARY_DIR
     NAMES ${USD_LIB_PREFIX}usd${USD_LIB_EXTENSION}
     ${USD_LIB_PREFIX}usd_ms${USD_LIB_EXTENSION}
+    ${USD_LIB_PREFIX}usd_usd${USD_LIB_EXTENSION}
     ${USD_LIB_PREFIX}usd_m${USD_STATIC_LIB_EXTENSION}
     PATHS "${USD_LIBRARY_DIR}"
     "${USD_LOCATION}/lib"
@@ -138,7 +139,9 @@ set(USD_LIBS ar;arch;cameraUtil;garch;gf;glf;hd;hdMtlx;hdSt;hdx;hf;hgi;hgiGL;hgI
 
 foreach (lib ${USD_LIBS})
     find_library(USD_${lib}_LIBRARY
-        NAMES ${USD_LIB_PREFIX}${lib}${USD_LIB_EXTENSION}
+        NAMES
+            ${USD_LIB_PREFIX}${lib}${USD_LIB_EXTENSION}
+            ${USD_LIB_PREFIX}usd_${lib}${USD_LIB_EXTENSION}
         HINTS ${USD_LIBRARY_DIR})
     if (USD_${lib}_LIBRARY)
         add_library(${lib} INTERFACE IMPORTED)
@@ -152,7 +155,9 @@ endforeach ()
 
 # Look for the static library.
 find_library(USD_usd_m_LIBRARY
-    NAMES ${USD_LIB_PREFIX}usd_m${USD_STATIC_LIB_EXTENSION}
+    NAMES
+        ${USD_LIB_PREFIX}usd_m${USD_STATIC_LIB_EXTENSION}
+        ${USD_LIB_PREFIX}usd_usd_m${USD_STATIC_LIB_EXTENSION}
     HINTS ${USD_LIBRARY_DIR})
 if (USD_usd_m_LIBRARY)
     add_library(usd_m INTERFACE IMPORTED)
