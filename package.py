@@ -5,7 +5,7 @@ authors = [
 ]
 
 # NOTE: version = <arnoldusd_version>.sse.<sse_version>
-version = "7.1.2.0.sse.1.0.1"
+version = "7.1.3.0.sse.1.0.0"
 
 description = \
     """
@@ -30,7 +30,7 @@ with scope("config") as c:
     #c.build_thread_count = "physical_cores"
 
 requires = [
-    "arnold_sdk-7.1.2.0",
+    "arnold_sdk-7.1.3.1",
 ]
 
 private_build_requires = [
