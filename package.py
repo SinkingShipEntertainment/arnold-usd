@@ -72,8 +72,8 @@ def commands():
     env.ARNOLD_USD_LOCATION.append("{root}")
 
     env.ARNOLD_PLUGIN_PATH.append("{root}/procedural")
-    env.PYTHONPATH.append("{root}/lib/python")
+    #env.PYTHONPATH.append("{root}/lib/python")
     env.PXR_PLUGINPATH_NAME.append("{root}/plugin")
-    env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
-    env.LD_LIBRARY_PATH.append("{root}/lib")
+    #env.PXR_PLUGINPATH_NAME.append("{root}/lib/usd")
+    #env.LD_LIBRARY_PATH.append("{root}/lib")
     env.PATH.append("{root}/bin")
