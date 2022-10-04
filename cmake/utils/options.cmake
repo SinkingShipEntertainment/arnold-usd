@@ -35,7 +35,7 @@ option(BUILD_TESTSUITE "Builds the testsuite" OFF)
 option(BUILD_UNIT_TESTS "Build the unit tests" OFF)
 option(BUILD_USE_PYTHON3 "Use python 3." ON)
 
-option(ENABLE_MATERIALX "Support reading MaterialX shaders." ON)
+option(ENABLE_MATERIALX "Support reading MaterialX shaders." OFF)  # Marcelo: render_delegate/node_graph.cpp:751 is erroring out. We are building against Arnold version 7.1.3.1 (ARNOLD_VERSION_NUMBER = 70103) but it's not working.
 
 set(PREFIX_PROCEDURAL "procedural" CACHE STRING "Directory to install the procedural under.")
 set(PREFIX_PLUGINS "plugin" CACHE STRING "Directory to install the plugins (Hydra and Ndr) under.")
