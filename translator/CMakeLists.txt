@@ -7,6 +7,7 @@ set(SRC
     reader/read_shader.cpp
     reader/read_skinning.cpp
     reader/read_options.cpp
+    reader/read_skinning.cpp
     reader/reader.cpp
     reader/registry.cpp
     reader/utils.cpp
@@ -29,6 +30,7 @@ set(HDR
     reader/read_shader.h
     reader/read_skinning.h
     reader/read_options.h
+    reader/read_skinning.h
     reader/reader.h
     reader/registry.h
     reader/utils.h
