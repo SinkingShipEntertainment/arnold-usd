@@ -5,7 +5,7 @@ authors = [
 ]
 
 # NOTE: version = <arnoldusd_version>.sse.<sse_version>
-version = "7.1.4.0.sse.1.0.0"
+version = "7.1.4.3.sse.1.0.0"
 
 description = """Arnold USD"""
 
@@ -27,7 +27,7 @@ with scope("config") as c:
     #c.build_thread_count = "physical_cores"
 
 requires = [
-    "arnold_sdk-7.1.4.0",
+    "arnold_sdk-7.1.4.3",
 ]
 
 private_build_requires = [
@@ -35,10 +35,8 @@ private_build_requires = [
 ]
 
 variants = [
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "python-3.9", "usd-22.05", "ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "python-3.9", "usd-22.05", "!ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "python-3.9", "usd-22.11", "ptex"],
-    ["platform-linux", "arch-x86_64", "os-centos-7", "boost-1.70", "python-3.9", "usd-22.11", "!ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "python-3.9", "usd-22.11.sse.2", "ptex"],
+    ["platform-linux", "arch-x86_64", "os-centos-7", "python-3.9", "usd-22.11.sse.2", "!ptex"],
 ]
 
 # Pass cmake arguments:
